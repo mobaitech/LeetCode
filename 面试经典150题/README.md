@@ -2,7 +2,7 @@
 >
 > 除了基本的解法，还按照要求尽量拓展解法，使用Java语言，深入学习Java。
 
-## 1.[88. 合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array/)
+## 1.[[简单]88. 合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array/)
 
 给你两个按 **非递减顺序** 排列的整数数组 `nums1` 和 `nums2`，另有两个整数 `m` 和 `n` ，分别表示 `nums1` 和 `nums2` 中的元素数目。
 
@@ -157,7 +157,7 @@ class Solution {
 
 
 
-## 2.[27. 移除元素](https://leetcode.cn/problems/remove-element/)
+## 2.[[简单]27. 移除元素](https://leetcode.cn/problems/remove-element/)
 
 给你一个数组 `nums` 和一个值 `val`，你需要 **[原地](https://baike.baidu.com/item/原地算法)** 移除所有数值等于 `val` 的元素。元素的顺序可能发生改变。然后返回 `nums` 中与 `val` 不同的元素的数量。
 
@@ -215,3 +215,249 @@ for (int i = 0; i < actualLength; i++) {
 - `0 <= nums.length <= 100`
 - `0 <= nums[i] <= 50`
 - `0 <= val <= 100`
+
+
+
+**解法1：**
+
+> 枚举，基于不在意后面存储了什么元素。
+>
+> *O*(*N*)
+
+```java
+class Solution {
+  public int removeElement(int[] nums, int val) {
+      int k=0;
+      for(int i=0;i<nums.length;i++){
+          if(nums[i]!=val){
+              nums[k]=nums[i];
+              k++;
+          }
+      }
+      return k;
+  }
+}
+```
+
+> k++确保了k的数值代表了数组nums的长度
+>
+> 不必在乎剩下的数组里面存储了什么
+
+
+
+**解法2：**
+
+> 双指针，参考提示得出灵感。
+>
+> *O*(*N*)
+
+```java
+class Solution {
+  public int removeElement(int[] nums, int val) {
+    if (nums.length == 0)
+      return 0;
+    int k = nums.length;
+    int l = 0, r = nums.length - 1;
+    while (nums[r] == val && r >= 0) {
+      r--;
+      k--;
+      if (k == 0)
+        return 0;
+    }
+    while (l <= r) {
+      if (nums[l] == val) {
+        nums[l] = nums[r];
+        nums[r] = val;
+        r--;
+        k--;
+      }
+      l++;
+      while (nums[r] == val && r >= 0) {
+        r--;
+        k--;
+        if (k == 0)
+          return 0;
+      }
+    }
+    return k;
+  }
+}
+```
+
+> 总是右指针匹配了就把移动右指针，把长度减少。
+>
+> 基于左右交换的双指针。
+
+
+
+**题解：**
+
+> 主要是自己的双指针写的过于繁琐
+
+```java
+class Solution {
+    public int removeElement(int[] nums, int val) {
+        int n = nums.length;
+        int left = 0;
+        for (int right = 0; right < n; right++) {
+            if (nums[right] != val) {
+                nums[left] = nums[right];
+                left++;
+            }
+        }
+        return left;
+    }
+}
+```
+
+> 基于快慢指针的双指针。
+>
+> 其实这里和我的解法1一致，不过我的解法1显然比题解还要好。
+
+
+
+## 3.[[简单]26. 删除有序数组中的重复项](https://leetcode.cn/problems/remove-duplicates-from-sorted-array/)
+
+给你一个 **非严格递增排列** 的数组 `nums` ，请你**[ 原地](http://baike.baidu.com/item/原地算法)** 删除重复出现的元素，使每个元素 **只出现一次** ，返回删除后数组的新长度。元素的 **相对顺序** 应该保持 **一致** 。然后返回 `nums` 中唯一元素的个数。
+
+考虑 `nums` 的唯一元素的数量为 `k` ，你需要做以下事情确保你的题解可以被通过：
+
+- 更改数组 `nums` ，使 `nums` 的前 `k` 个元素包含唯一元素，并按照它们最初在 `nums` 中出现的顺序排列。`nums` 的其余元素与 `nums` 的大小不重要。
+- 返回 `k` 。
+
+**判题标准:**
+
+系统会用下面的代码来测试你的题解:
+
+```
+int[] nums = [...]; // 输入数组
+int[] expectedNums = [...]; // 长度正确的期望答案
+
+int k = removeDuplicates(nums); // 调用
+
+assert k == expectedNums.length;
+for (int i = 0; i < k; i++) {
+    assert nums[i] == expectedNums[i];
+}
+```
+
+如果所有断言都通过，那么您的题解将被 **通过**。
+
+ 
+
+**示例 1：**
+
+```
+输入：nums = [1,1,2]
+输出：2, nums = [1,2,_]
+解释：函数应该返回新的长度 2 ，并且原数组 nums 的前两个元素被修改为 1, 2 。不需要考虑数组中超出新长度后面的元素。
+```
+
+**示例 2：**
+
+```
+输入：nums = [0,0,1,1,1,2,2,3,3,4]
+输出：5, nums = [0,1,2,3,4]
+解释：函数应该返回新的长度 5 ， 并且原数组 nums 的前五个元素被修改为 0, 1, 2, 3, 4 。不需要考虑数组中超出新长度后面的元素。
+```
+
+ 
+
+**提示：**
+
+- `1 <= nums.length <= 3 * 104`
+- `-104 <= nums[i] <= 104`
+- `nums` 已按 **非严格递增** 排列
+
+> 这个题和上面那个题基本类似了。
+>
+> 虽然元素的出现不一定是按照严格递增，但是整体出现的位置是相对的，这里出现了后面也不能再出现了。
+
+
+
+**解法1：**
+
+> 和上面那个题的思想一致了
+
+```java
+class Solution {
+  public int removeDuplicates(int[] nums) {
+    int k = 0;
+    for (int i = 0; i < nums.length; i++) {
+      if (i == 0 || nums[i] != nums[i - 1]) {
+        nums[k++] = nums[i];
+      }
+    }
+    return k;
+  }
+}
+```
+
+> 至于为什么是i == 0 || nums[i] != nums[i - 1])
+>
+> 提示下面那段注释解释的很清楚了
+
+
+
+## 4.[[中等]80. 删除有序数组中的重复项 II](https://leetcode.cn/problems/remove-duplicates-from-sorted-array-ii/)
+
+给你一个有序数组 `nums` ，请你**[ 原地](http://baike.baidu.com/item/原地算法)** 删除重复出现的元素，使得出现次数超过两次的元素**只出现两次** ，返回删除后数组的新长度。
+
+不要使用额外的数组空间，你必须在 **[原地 ](https://baike.baidu.com/item/原地算法)修改输入数组** 并在使用 O(1) 额外空间的条件下完成。
+
+ 
+
+**说明：**
+
+为什么返回数值是整数，但输出的答案是数组呢？
+
+请注意，输入数组是以**「引用」**方式传递的，这意味着在函数里修改输入数组对于调用者是可见的。
+
+你可以想象内部操作如下:
+
+```
+// nums 是以“引用”方式传递的。也就是说，不对实参做任何拷贝
+int len = removeDuplicates(nums);
+
+// 在函数里修改输入数组对于调用者是可见的。
+// 根据你的函数返回的长度, 它会打印出数组中 该长度范围内 的所有元素。
+for (int i = 0; i < len; i++) {
+    print(nums[i]);
+}
+```
+
+ 
+
+**示例 1：**
+
+```
+输入：nums = [1,1,1,2,2,3]
+输出：5, nums = [1,1,2,2,3]
+解释：函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3。 不需要考虑数组中超出新长度后面的元素。
+```
+
+**示例 2：**
+
+```
+输入：nums = [0,0,1,1,1,1,2,3,3]
+输出：7, nums = [0,0,1,1,2,3,3]
+解释：函数应返回新长度 length = 7, 并且原数组的前七个元素被修改为 0, 0, 1, 1, 2, 3, 3。不需要考虑数组中超出新长度后面的元素。
+```
+
+ 
+
+**提示：**
+
+- `1 <= nums.length <= 3 * 104`
+- `-104 <= nums[i] <= 104`
+- `nums` 已按升序排列
+
+> 只能原地操作，不让使用新的空间。出现的次数大于等于2则保存两次
+
+
+
+**解法1：**
+
+```java
+```
+
