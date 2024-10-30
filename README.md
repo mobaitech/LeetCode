@@ -47,3 +47,68 @@
 **性能差异**：
 
 - `entrySet()`遍历在性能上通常优于`keySet()`遍历，因为`entrySet()`直接访问键和值，而`keySet()`遍历需要通过键再次访问值，这会增加额外的查找开销。
+
+
+
+## 3.Map的初始化
+
+1. **使用 `HashMap` 构造函数**：
+
+   ```java
+   Map<String, Integer> map = new HashMap<>();
+   map.put("a", 1);
+   map.put("b", 2);
+   map.put("c", 3);
+   
+   // 同时注意下面这种形式
+   Map<String, Integer> map = new HashMap<String, Integer>(){{
+   	put("a", 1);
+   	put("b", 2);
+   	put("c", 3);
+   }}
+   ```
+
+2. **使用 `Map.of`**：
+
+   - 适用于最多 10 个键值对的不可变映射。
+
+   ```java
+   Map<String, Integer> map = Map.of("a", 1, "b", 2, "c", 3);
+   ```
+
+   **使用 `Map.ofEntries`**：
+
+   - 适用于任意数量键值对的不可变映射。
+
+   ```java
+   Map<String, Integer> map = Map.ofEntries(
+     Map.entry("a", 1),
+     Map.entry("b", 2),
+     Map.entry("c", 3),
+     Map.entry("d", 4),
+     Map.entry("e", 5)
+   )；
+   ```
+
+3. **使用 `Collections.singletonMap`**：
+
+   - 适用于只有一个键值对的不可变映射。
+
+   ```java
+   Map<String, Integer> map = Collections.singletonMap("a", 1);
+   ```
+
+4. **使用 `Stream` 和 `Collectors.toMap`**：
+
+   - 适用于动态生成键值对的映射。
+
+   ```java
+   Map<String, Integer> map = Stream.of(new Object[][] {
+     { "a", 1 },
+     { "b", 2 },
+     { "c", 3 },
+   }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
+   ```
+
+   > 利用stream和lombda表达式
+
