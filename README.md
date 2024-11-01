@@ -66,6 +66,7 @@
    	put("b", 2);
    	put("c", 3);
    }}
+   // 匿名内部类的一个实例初始值设定项 （也称为一种"双大括号初始化"）,其他部分实现类也能通过这种方式初始化
    ```
 
 2. **使用 `Map.of`**：
@@ -288,4 +289,113 @@ str.startWith(otherStr);
    
    Arrays.sort(strs, (s1, s2) -> Integer.compare(s1.length(), s2.length()));
    ```
+
+## 7,List<? >初始化
+
+> 关于List非常详细的介绍看下列博文，这里不做没有意义的重复搬运
+>
+> https://juejin.cn/post/7290741484365545472
+
+### 1.实现类初始化
+
+```java
+List<String> test = new ArrayList<String>();
+test.add("aaa");
+test.add("bbb");
+test.add("ccc");
+System.out.println(test.size());
+```
+
+### 2.利用Arrays工具包
+
+```java
+List<String> test1 = Arrays.asList("xxx","yyy","zzz");
+//test1.add("aaa");//wrong  java.lang.UnsupportedOperationException
+//test1.add("bbb");//wrong  java.lang.UnsupportedOperationException
+//test1.add("ccc");//wrong  java.lang.UnsupportedOperationException
+System.out.println(test1.size());
+```
+
+### 3.不完全利用Array工具包
+
+```java
+List<String> test2 =new ArrayList<String>(Arrays.asList("xxx","yyy","zzz"));
+test2.add("aaa");
+test2.add("bbb");
+test2.add("ccc");
+System.out.println(test2.size());
+```
+
+### 4.匿名内部类
+
+```java
+List<String> test3 = new ArrayList<String>(){
+	{  
+	add("aaa");  
+	add("bbb");  
+	add("ccc");  
+	}
+}; 
+```
+
+
+
+## 8.List<List<`Integer`>>
+
+> 有点套娃的感觉，这里特意稍微记录下，其本质和C++里面的vector<vector<`int`>>差别不大
+
+### 1.初始化
+
+```java
+List<List<Integer>> list = new ArrayList<>();
+```
+
+或者
+
+```java
+List<List<Integer>> list = new ArrayList<List<Integer>>();
+```
+
+这里能够对Java的接口和实现类有更多的了解和认识，注意看下面使用，就能大致发现脉络
+
+### 2.比较/去重
+
+这种对象类显然不是使用==来比较，可以使用contains来进行比较
+
+#### 1.使用contains去重
+
+> 单独的两个List用equal来比较即可
+
+```java
+for(int i=0;i<ans.size();i++){
+    List<Integer> temp = ans.get(i);
+    Collections.sort(temp);
+    if(!ret.contains(temp)){
+        System.out.println(temp);
+        ret.add(temp);
+    }
+}
+```
+
+> 用于单个List对象内部去重，但是开辟了额外的数组空间，空间复杂度高
+
+#### 2.使用remove去重
+
+> 双重for循环，j=i+1即可
+
+```java
+if(list.get(i).equals(list.get(j))){
+    list.remove(j);
+}
+```
+
+#### 3.使用LinkedHashSet实现List去重(无序)
+
+> 使用了其他对象，空间复杂度高，不过少了排序的步骤
+
+```java
+List<String> list = new ArrayList<>(Arrays.asList("apple", "banana", "apple", "orange", "banana"));
+Set<String> set = new LinkedHashSet<>(list);
+List<String> newList = new ArrayList<>(set);
+```
 
