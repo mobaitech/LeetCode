@@ -1,3 +1,23 @@
+## 目录
+
+### 面试经典150题
+
+ [[1-24]数组 : 字符串.md](面试经典150题/[1-24]数组 : 字符串.md) 
+
+ [[25-29]双指针.md](面试经典150题/[25-29]双指针.md) 
+
+### 剑指Offer
+
+> 题库参考这里
+>
+> https://blog.csdn.net/weixin_43840280/article/details/119447204
+
+### 宝藏算法指导
+
+ [Hello算法C语言.pdf](Notes/Hello算法C语言.pdf) 
+
+> 上面记录刷题目录，下面记录Java零零散散的知识点，关于Java基础见Java笔记部分。对于算法，跟着一个作者即可，不要东看看西看看。务必！要的是沉浸和深入，减少些现代社会的浮躁吧。
+
 ## 1.复制数组
 
 `Arrays.copyOfRange(nums3, 0, m + n)` 和 `System.arraycopy(nums3, 0, nums1, 0, m + n)` 都是用来复制数组的方法，但它们有一些区别：
@@ -219,35 +239,35 @@ Map<Integer, String> romanMap = new LinkedHashMap<>(sortedMap);
 - 格式1：`String strArray[] = str.split(正则表达式);`
 - 格式2：`String strArray[] = str.split(正则表达式, limit);`
 
-> ```java
-> String str = "apple,banana,orange";
-> String[] fruits = str.split(",");
-> 
-> String str = "apple;banana,orange";
-> String[] fruits = str.split("[,;]");
-> // 输出：
-> // apple
-> // banana
-> // orange
-> 
-> String str = "apple,banana,orange";
-> String[] fruits = str.split(",", 2);
-> // 输出：
-> // apple
-> // banana,orange
-> 
-> String str = "hello  world"; // 两个空格
-> str.split(" ");
-> // 输出
-> // "hello"
-> // “”
-> // “world”
-> 
-> str.split("\\s");
-> // 输出
-> // "hello"
-> // “world”
-> ```
+```java
+String str = "apple,banana,orange";
+String[] fruits = str.split(",");
+
+String str = "apple;banana,orange";
+String[] fruits = str.split("[,;]");
+// 输出：
+// apple
+// banana
+// orange
+
+String str = "apple,banana,orange";
+String[] fruits = str.split(",", 2);
+// 输出：
+// apple
+// banana,orange
+
+String str = "hello  world"; // 两个空格
+str.split(" ");
+// 输出
+// "hello"
+// “”
+// “world”
+
+str.split("\\s");
+// 输出
+// "hello"
+// “world”
+```
 >
 > 这里稍微注意了
 
@@ -398,4 +418,34 @@ List<String> list = new ArrayList<>(Arrays.asList("apple", "banana", "apple", "o
 Set<String> set = new LinkedHashSet<>(list);
 List<String> newList = new ArrayList<>(set);
 ```
+
+
+
+## 9.LinkedList
+
+`LinkedList` 是 Java 集合框架中的一个类，基于双向链表实现。以下是一些关键知识点：
+
+1. **实现的接口**：
+   - `List`：提供列表的基本操作，如添加、删除、访问元素等。
+   - `Deque`：提供双端队列的操作，如在头部和尾部添加、删除元素。
+   - `Queue`：提供队列的基本操作，如添加、删除、查看队首元素等。
+2. **特点**：
+   - **双向链表**：每个节点包含指向前一个和后一个节点的指针。
+   - **动态大小**：不需要预先指定大小，插入和删除操作不会引起内存的重新分配。
+   - **插入和删除效率高**：在链表的任意位置插入或删除元素的时间复杂度为 O(1)。
+   - **访问效率低**：访问任意位置的元素需要从头或尾遍历，时间复杂度为 O(n)。
+3. **常用方法**：
+   - `add(E e)`：在链表的尾部添加元素。
+   - `addFirst(E e)`：在链表的头部添加元素。
+   - `addLast(E e)`：在链表的尾部添加元素。
+   - `remove()`：删除并返回链表的头部元素。
+   - `removeFirst()`：删除并返回链表的头部元素。
+   - `removeLast()`：删除并返回链表的尾部元素。
+   - `get(int index)`：返回指定位置的元素。
+   - `size()`：返回链表的元素个数。
+4. **使用场景**：
+   - 适用于频繁插入和删除操作的场景。
+   - 不适用于频繁随机访问的场景。
+
+> 在大量插入，删除（尤其是头和尾）的情况下非常推荐使用LinkedList
 
